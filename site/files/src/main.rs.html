@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>src/main.rs · Elden Ring Combat Rewrite</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%9A%94%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/hljs/github-dark.min.css" id="hljs-dark">
+<link rel="stylesheet" href="/hljs/github.min.css" id="hljs-light" disabled>
+<style>
+:root{--bg:#0e0d0b;--panel:#171512;--panel2:#1e1a15;--border:#2e2820;--gold:#c8a24a;--gold2:#e8cf8a;--fg:#e6dfcf;--dim:#9a917e;--code:#14120f;}
+body.light{--bg:#f6f1e7;--panel:#fffdf6;--panel2:#f1ead9;--border:#ddd2b8;--gold:#8a6d1f;--gold2:#6e5514;--fg:#2b2517;--dim:#6f6650;--code:#fbf7ec;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;transition:background .15s,color .15s}
+a{color:var(--gold2);text-decoration:none}a:hover{text-decoration:underline}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 18px;background:var(--panel);border-bottom:1px solid var(--border)}
+header .brand{font-weight:700;color:var(--gold);letter-spacing:.4px;white-space:nowrap}
+header .sub{color:var(--dim);font-size:12.5px;white-space:nowrap}
+header .spacer{flex:1}
+header form{display:flex;gap:6px}
+header input.search{width:200px;background:var(--code);border:1px solid var(--border);border-radius:6px;color:var(--fg);padding:6px 10px;font-size:13px}
+header input.search:focus{outline:none;border-color:var(--gold)}
+header a.btn,header button.btn{font-size:12.5px;border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--fg);background:var(--panel2);white-space:nowrap;cursor:pointer}
+header a.btn:hover,header button.btn:hover{border-color:var(--gold);color:var(--gold2);text-decoration:none}
+button.btn{font-size:12.5px;border:1px solid var(--border);border-radius:6px;padding:4px 11px;color:var(--fg);background:var(--panel2);cursor:pointer}
+button.btn:hover{border-color:var(--gold);color:var(--gold2)}
+.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 46px)}
+aside{border-right:1px solid var(--border);background:var(--panel);padding:14px 10px 40px;overflow:auto;max-height:calc(100vh - 46px);position:sticky;top:46px}
+aside .filter{width:100%;background:var(--code);border:1px solid var(--border);border-radius:6px;color:var(--fg);padding:7px 9px;font-size:13px;margin-bottom:10px}
+.tree,.tree ul{list-style:none;margin:0;padding-left:12px}
+.tree{padding-left:0;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.tree summary{cursor:pointer;color:var(--dim);padding:2px 0}
+.tree summary::marker{color:var(--gold)}
+.tree a{display:block;padding:1.5px 6px;border-radius:5px;color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px}
+.tree a:hover{background:var(--panel2);text-decoration:none}
+.tree a.active{background:var(--panel2);color:var(--gold2);box-shadow:inset 2px 0 0 var(--gold)}
+main{padding:30px 44px 60px;max-width:1000px;min-width:0}
+h1,h2,h3,h4{color:var(--gold2);font-weight:650;line-height:1.3}
+h1{font-size:29px;border-bottom:1px solid var(--border);padding-bottom:12px;margin-top:6px}
+h2{font-size:22px;margin-top:38px;border-bottom:1px solid var(--border);padding-bottom:6px}h3{font-size:18px;margin-top:28px}
+h4{font-size:16px;margin-top:22px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:18px 0}
+.card h3{margin-top:0}
+.kv{display:grid;grid-template-columns:180px 1fr;gap:4px 14px;font-size:14px;margin:0}
+.kv dt{color:var(--dim)}.kv dd{margin:0}
+.badges span{display:inline-block;background:var(--panel2);border:1px solid var(--border);color:var(--gold2);border-radius:20px;padding:1px 12px;font-size:12px;margin:0 6px 6px 0}
+pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.55}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code,td code,h code{background:var(--code);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:.88em}
+blockquote{border-left:3px solid var(--gold);margin:14px 0;padding:2px 16px;color:var(--dim);background:var(--panel);border-radius:0 6px 6px 0}
+table{border-collapse:collapse;margin:14px 0;width:100%;display:block;overflow:auto}
+th,td{border:1px solid var(--border);padding:6px 12px;text-align:left}
+th{background:var(--panel2);color:var(--gold2)}
+img,video{max-width:100%;border-radius:8px;border:1px solid var(--border)}
+hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.crumbs{color:var(--dim);font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace;margin-bottom:10px;word-break:break-all}
+.filehead{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;color:var(--dim);flex-wrap:wrap}
+.filehead .path{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--fg)}
+.navfiles{display:flex;justify-content:space-between;gap:10px;margin:14px 0 26px;font-size:13.5px}
+.navfiles a{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.navfiles .next{margin-left:auto;text-align:right}
+.codewrap{display:flex;overflow:auto;background:var(--code);border:1px solid var(--border);border-radius:8px}
+.gutter{position:sticky;left:0;flex:none;background:var(--code);border-right:1px solid var(--border);user-select:none;z-index:2}
+.gutter a,.code .cl{display:block;height:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
+.gutter a{color:var(--dim);text-align:right;padding:0 12px 0 16px;text-decoration:none}
+.gutter a:hover{color:var(--gold2);text-decoration:none}
+.code{flex:1;min-width:0;margin:0;padding:14px 18px;border:none;border-radius:0;overflow:visible;background:transparent}
+.code .cl{padding:0 4px}
+.code .cl:target,.code .cl.flash{background:rgba(200,162,74,.16);box-shadow:inset 2px 0 0 var(--gold)}
+pre code.hljs{background:transparent;padding:0;display:block}
+.mdpre{position:relative}
+.mdpre .copy{position:absolute;top:8px;right:8px;opacity:.75}
+.hidden{display:none!important}
+mark{background:#6b5a1e;color:#ffe9a8;border-radius:2px;padding:0 1px}
+body.light mark{background:#f0d98c;color:#3a2f10}
+footer{color:var(--dim);font-size:12.5px;border-top:1px solid var(--border);padding:16px 44px;margin-top:20px}
+.toc{columns:2;column-gap:34px}
+.toc a{display:block;padding:2px 0;font-size:13.5px}
+.kbd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;background:var(--panel2);border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--fg)}
+#hamburger{display:none}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  aside{position:fixed;left:0;top:46px;bottom:0;width:270px;z-index:15;transform:translateX(-100%);transition:transform .18s;box-shadow:6px 0 24px rgba(0,0,0,.4)}
+  aside.open{transform:none}
+  main{padding:18px 16px 60px;max-width:100%}
+  #hamburger{display:inline-block}
+  header .sub{display:none}
+  header input.search{width:110px}
+  footer{padding:16px}
+  .toc{columns:1}
+}
+</style>
+</head><body>
+<header>
+  <button class="btn" id="hamburger" aria-label="Toggle file tree">☰</button>
+  <a class="brand" href="/">⚔ ER Combat Rewrite</a>
+  <span class="sub">af95e33</span>
+  <span class="spacer"></span>
+  <form action="/search.html" method="get"><input class="search" name="q" type="search" placeholder="Search files…  ( / )" autocomplete="off"></form>
+  <button class="btn" id="theme" title="Toggle light/dark (t)">◐</button>
+  <a class="btn" href="https://github.com/Mwimwii/er-web" target="_blank">GitHub ↗</a>
+</header>
+<div class="layout">
+<aside id="sidebar">
+  <input class="filter" id="filter" type="search" placeholder="Filter files… (e.g. player.rs)">
+  <ul class="tree"><li><details open><summary title="src/" data-name="src">src/</summary><ul class="tree"><li><details open><summary title="sim/" data-name="sim">sim/</summary><ul class="tree"><li><a href="/files/src/sim/data.rs.html" title="src/sim/data.rs" data-name="data.rs" data-path="src/sim/data.rs">data.rs</a></li><li><a href="/files/src/sim/dummy.rs.html" title="src/sim/dummy.rs" data-name="dummy.rs" data-path="src/sim/dummy.rs">dummy.rs</a></li><li><a href="/files/src/sim/level.rs.html" title="src/sim/level.rs" data-name="level.rs" data-path="src/sim/level.rs">level.rs</a></li><li><a href="/files/src/sim/mod.rs.html" title="src/sim/mod.rs" data-name="mod.rs" data-path="src/sim/mod.rs">mod.rs</a></li><li><a href="/files/src/sim/player.rs.html" title="src/sim/player.rs" data-name="player.rs" data-path="src/sim/player.rs">player.rs</a></li><li><a href="/files/src/sim/tests.rs.html" title="src/sim/tests.rs" data-name="tests.rs" data-path="src/sim/tests.rs">tests.rs</a></li></ul></details></li><li><a href="/files/src/anim.rs.html" title="src/anim.rs" data-name="anim.rs" data-path="src/anim.rs">anim.rs</a></li><li><a href="/files/src/audio.rs.html" title="src/audio.rs" data-name="audio.rs" data-path="src/audio.rs">audio.rs</a></li><li><a href="/files/src/camera.rs.html" title="src/camera.rs" data-name="camera.rs" data-path="src/camera.rs">camera.rs</a></li><li><a href="/files/src/demo.rs.html" title="src/demo.rs" data-name="demo.rs" data-path="src/demo.rs">demo.rs</a></li><li><a href="/files/src/hud.rs.html" title="src/hud.rs" data-name="hud.rs" data-path="src/hud.rs">hud.rs</a></li><li><a href="/files/src/input.rs.html" title="src/input.rs" data-name="input.rs" data-path="src/input.rs">input.rs</a></li><li><a href="/files/src/main.rs.html" title="src/main.rs" data-name="main.rs" data-path="src/main.rs">main.rs</a></li><li><a href="/files/src/rig.rs.html" title="src/rig.rs" data-name="rig.rs" data-path="src/rig.rs">rig.rs</a></li><li><a href="/files/src/view.rs.html" title="src/view.rs" data-name="view.rs" data-path="src/view.rs">view.rs</a></li></ul></details></li><li><details open><summary title="tools/" data-name="tools">tools/</summary><ul class="tree"><li><details open><summary title="ww2ogg/" data-name="ww2ogg">ww2ogg/</summary><ul class="tree"><li><a href="/files/tools/ww2ogg/COPYING.html" title="tools/ww2ogg/COPYING" data-name="copying" data-path="tools/ww2ogg/copying">COPYING</a></li><li><a href="/files/tools/ww2ogg/packed_codebooks_aoTuV_603.bin.html" title="tools/ww2ogg/packed_codebooks_aoTuV_603.bin" data-name="packed_codebooks_aotuv_603.bin" data-path="tools/ww2ogg/packed_codebooks_aotuv_603.bin">packed_codebooks_aoTuV_603.bin</a></li></ul></details></li><li><a href="/files/tools/bake_anims.py.html" title="tools/bake_anims.py" data-name="bake_anims.py" data-path="tools/bake_anims.py">bake_anims.py</a></li><li><a href="/files/tools/bake_sounds.py.html" title="tools/bake_sounds.py" data-name="bake_sounds.py" data-path="tools/bake_sounds.py">bake_sounds.py</a></li><li><a href="/files/tools/erfmt.py.html" title="tools/erfmt.py" data-name="erfmt.py" data-path="tools/erfmt.py">erfmt.py</a></li><li><a href="/files/tools/extract.py.html" title="tools/extract.py" data-name="extract.py" data-path="tools/extract.py">extract.py</a></li><li><a href="/files/tools/hkanim.py.html" title="tools/hkanim.py" data-name="hkanim.py" data-path="tools/hkanim.py">hkanim.py</a></li><li><a href="/files/tools/hkx.py.html" title="tools/hkx.py" data-name="hkx.py" data-path="tools/hkx.py">hkx.py</a></li><li><a href="/files/tools/param.py.html" title="tools/param.py" data-name="param.py" data-path="tools/param.py">param.py</a></li><li><a href="/files/tools/paths.py.html" title="tools/paths.py" data-name="paths.py" data-path="tools/paths.py">paths.py</a></li><li><a href="/files/tools/setup.py.html" title="tools/setup.py" data-name="setup.py" data-path="tools/setup.py">setup.py</a></li><li><a href="/files/tools/skel.py.html" title="tools/skel.py" data-name="skel.py" data-path="tools/skel.py">skel.py</a></li><li><a href="/files/tools/tae.py.html" title="tools/tae.py" data-name="tae.py" data-path="tools/tae.py">tae.py</a></li><li><a href="/files/tools/wem.py.html" title="tools/wem.py" data-name="wem.py" data-path="tools/wem.py">wem.py</a></li><li><a href="/files/tools/wwise.py.html" title="tools/wwise.py" data-name="wwise.py" data-path="tools/wwise.py">wwise.py</a></li></ul></details></li><li><a href="/files/.gitignore.html" title=".gitignore" data-name=".gitignore" data-path=".gitignore">.gitignore</a></li><li><a href="/files/audit.sh.html" title="audit.sh" data-name="audit.sh" data-path="audit.sh">audit.sh</a></li><li><a href="/files/build.rs.html" title="build.rs" data-name="build.rs" data-path="build.rs">build.rs</a></li><li><a href="/files/Cargo.lock.html" title="Cargo.lock" data-name="cargo.lock" data-path="cargo.lock">Cargo.lock</a></li><li><a href="/files/Cargo.toml.html" title="Cargo.toml" data-name="cargo.toml" data-path="cargo.toml">Cargo.toml</a></li><li><a href="/files/gen.mjs.html" title="gen.mjs" data-name="gen.mjs" data-path="gen.mjs">gen.mjs</a></li><li><a href="/files/LICENSE.md.html" title="LICENSE.md" data-name="license.md" data-path="license.md">LICENSE.md</a></li><li><a href="/files/package-lock.json.html" title="package-lock.json" data-name="package-lock.json" data-path="package-lock.json">package-lock.json</a></li><li><a href="/files/package.json.html" title="package.json" data-name="package.json" data-path="package.json">package.json</a></li><li><a href="/files/README.md.html" title="README.md" data-name="readme.md" data-path="readme.md">README.md</a></li><li><a href="/files/server.mjs.html" title="server.mjs" data-name="server.mjs" data-path="server.mjs">server.mjs</a></li><li><a href="/files/verify-static.sh.html" title="verify-static.sh" data-name="verify-static.sh" data-path="verify-static.sh">verify-static.sh</a></li></ul>
+</aside>
+<main><div class="crumbs">src/main.rs</div>
+<div class="filehead">
+  <span class="path">src/main.rs</span>
+  <span>4,638 chars · 152 lines</span>
+  <span>rust</span>
+  <button class="btn copy" type="button">Copy file</button>
+  <a class="btn" href="/raw/src/main.rs" download>Download</a>
+  <a class="btn" href="https://github.com/Mwimwii/er-web/blob/main/src/main.rs" target="_blank">On GitHub ↗</a>
+</div>
+<div class="codewrap"><div class="gutter" aria-hidden="true"><a href="#L1" data-n="1">1</a><a href="#L2" data-n="2">2</a><a href="#L3" data-n="3">3</a><a href="#L4" data-n="4">4</a><a href="#L5" data-n="5">5</a><a href="#L6" data-n="6">6</a><a href="#L7" data-n="7">7</a><a href="#L8" data-n="8">8</a><a href="#L9" data-n="9">9</a><a href="#L10" data-n="10">10</a><a href="#L11" data-n="11">11</a><a href="#L12" data-n="12">12</a><a href="#L13" data-n="13">13</a><a href="#L14" data-n="14">14</a><a href="#L15" data-n="15">15</a><a href="#L16" data-n="16">16</a><a href="#L17" data-n="17">17</a><a href="#L18" data-n="18">18</a><a href="#L19" data-n="19">19</a><a href="#L20" data-n="20">20</a><a href="#L21" data-n="21">21</a><a href="#L22" data-n="22">22</a><a href="#L23" data-n="23">23</a><a href="#L24" data-n="24">24</a><a href="#L25" data-n="25">25</a><a href="#L26" data-n="26">26</a><a href="#L27" data-n="27">27</a><a href="#L28" data-n="28">28</a><a href="#L29" data-n="29">29</a><a href="#L30" data-n="30">30</a><a href="#L31" data-n="31">31</a><a href="#L32" data-n="32">32</a><a href="#L33" data-n="33">33</a><a href="#L34" data-n="34">34</a><a href="#L35" data-n="35">35</a><a href="#L36" data-n="36">36</a><a href="#L37" data-n="37">37</a><a href="#L38" data-n="38">38</a><a href="#L39" data-n="39">39</a><a href="#L40" data-n="40">40</a><a href="#L41" data-n="41">41</a><a href="#L42" data-n="42">42</a><a href="#L43" data-n="43">43</a><a href="#L44" data-n="44">44</a><a href="#L45" data-n="45">45</a><a href="#L46" data-n="46">46</a><a href="#L47" data-n="47">47</a><a href="#L48" data-n="48">48</a><a href="#L49" data-n="49">49</a><a href="#L50" data-n="50">50</a><a href="#L51" data-n="51">51</a><a href="#L52" data-n="52">52</a><a href="#L53" data-n="53">53</a><a href="#L54" data-n="54">54</a><a href="#L55" data-n="55">55</a><a href="#L56" data-n="56">56</a><a href="#L57" data-n="57">57</a><a href="#L58" data-n="58">58</a><a href="#L59" data-n="59">59</a><a href="#L60" data-n="60">60</a><a href="#L61" data-n="61">61</a><a href="#L62" data-n="62">62</a><a href="#L63" data-n="63">63</a><a href="#L64" data-n="64">64</a><a href="#L65" data-n="65">65</a><a href="#L66" data-n="66">66</a><a href="#L67" data-n="67">67</a><a href="#L68" data-n="68">68</a><a href="#L69" data-n="69">69</a><a href="#L70" data-n="70">70</a><a href="#L71" data-n="71">71</a><a href="#L72" data-n="72">72</a><a href="#L73" data-n="73">73</a><a href="#L74" data-n="74">74</a><a href="#L75" data-n="75">75</a><a href="#L76" data-n="76">76</a><a href="#L77" data-n="77">77</a><a href="#L78" data-n="78">78</a><a href="#L79" data-n="79">79</a><a href="#L80" data-n="80">80</a><a href="#L81" data-n="81">81</a><a href="#L82" data-n="82">82</a><a href="#L83" data-n="83">83</a><a href="#L84" data-n="84">84</a><a href="#L85" data-n="85">85</a><a href="#L86" data-n="86">86</a><a href="#L87" data-n="87">87</a><a href="#L88" data-n="88">88</a><a href="#L89" data-n="89">89</a><a href="#L90" data-n="90">90</a><a href="#L91" data-n="91">91</a><a href="#L92" data-n="92">92</a><a href="#L93" data-n="93">93</a><a href="#L94" data-n="94">94</a><a href="#L95" data-n="95">95</a><a href="#L96" data-n="96">96</a><a href="#L97" data-n="97">97</a><a href="#L98" data-n="98">98</a><a href="#L99" data-n="99">99</a><a href="#L100" data-n="100">100</a><a href="#L101" data-n="101">101</a><a href="#L102" data-n="102">102</a><a href="#L103" data-n="103">103</a><a href="#L104" data-n="104">104</a><a href="#L105" data-n="105">105</a><a href="#L106" data-n="106">106</a><a href="#L107" data-n="107">107</a><a href="#L108" data-n="108">108</a><a href="#L109" data-n="109">109</a><a href="#L110" data-n="110">110</a><a href="#L111" data-n="111">111</a><a href="#L112" data-n="112">112</a><a href="#L113" data-n="113">113</a><a href="#L114" data-n="114">114</a><a href="#L115" data-n="115">115</a><a href="#L116" data-n="116">116</a><a href="#L117" data-n="117">117</a><a href="#L118" data-n="118">118</a><a href="#L119" data-n="119">119</a><a href="#L120" data-n="120">120</a><a href="#L121" data-n="121">121</a><a href="#L122" data-n="122">122</a><a href="#L123" data-n="123">123</a><a href="#L124" data-n="124">124</a><a href="#L125" data-n="125">125</a><a href="#L126" data-n="126">126</a><a href="#L127" data-n="127">127</a><a href="#L128" data-n="128">128</a><a href="#L129" data-n="129">129</a><a href="#L130" data-n="130">130</a><a href="#L131" data-n="131">131</a><a href="#L132" data-n="132">132</a><a href="#L133" data-n="133">133</a><a href="#L134" data-n="134">134</a><a href="#L135" data-n="135">135</a><a href="#L136" data-n="136">136</a><a href="#L137" data-n="137">137</a><a href="#L138" data-n="138">138</a><a href="#L139" data-n="139">139</a><a href="#L140" data-n="140">140</a><a href="#L141" data-n="141">141</a><a href="#L142" data-n="142">142</a><a href="#L143" data-n="143">143</a><a href="#L144" data-n="144">144</a><a href="#L145" data-n="145">145</a><a href="#L146" data-n="146">146</a><a href="#L147" data-n="147">147</a><a href="#L148" data-n="148">148</a><a href="#L149" data-n="149">149</a><a href="#L150" data-n="150">150</a><a href="#L151" data-n="151">151</a><a href="#L152" data-n="152">152</a></div><pre class="code"><code class="hljs language-rust"><span class="cl" id="L1"><span class="hljs-comment">//! Elden Ring-style player movement and combat on a primitive rig.</span></span><span class="cl" id="L2"><span class="hljs-comment">//!</span></span><span class="cl" id="L3"><span class="hljs-comment">//! `sim` is the whole game: a pure 60 Hz state machine with no engine types.</span></span><span class="cl" id="L4"><span class="hljs-comment">//! Everything else here only feeds it input and draws what it says.</span></span><span class="cl" id="L5"> </span><span class="cl" id="L6"><span class="hljs-keyword">use</span> bevy::prelude::*;</span><span class="cl" id="L7"> </span><span class="cl" id="L8"><span class="hljs-keyword">mod</span> anim;</span><span class="cl" id="L9"><span class="hljs-keyword">mod</span> audio;</span><span class="cl" id="L10"><span class="hljs-keyword">mod</span> camera;</span><span class="cl" id="L11"><span class="hljs-keyword">mod</span> demo;</span><span class="cl" id="L12"><span class="hljs-keyword">mod</span> hud;</span><span class="cl" id="L13"><span class="hljs-keyword">mod</span> input;</span><span class="cl" id="L14"><span class="hljs-keyword">mod</span> rig;</span><span class="cl" id="L15"><span class="hljs-keyword">mod</span> sim;</span><span class="cl" id="L16"><span class="hljs-keyword">mod</span> view;</span><span class="cl" id="L17"> </span><span class="cl" id="L18"><span class="hljs-keyword">use</span> sim::level::Level;</span><span class="cl" id="L19"><span class="hljs-keyword">use</span> sim::player::Input <span class="hljs-keyword">as</span> SimInput;</span><span class="cl" id="L20"> </span><span class="cl" id="L21"><span class="hljs-meta">#[derive(Resource)]</span></span><span class="cl" id="L22"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Sim</span>(<span class="hljs-keyword">pub</span> sim::World);</span><span class="cl" id="L23"> </span><span class="cl" id="L24"><span class="hljs-comment">/// Input accumulated since the last simulation tick. Button edges are OR-ed in</span></span><span class="cl" id="L25"><span class="hljs-comment">/// so a tap shorter than a tick is never lost.</span></span><span class="cl" id="L26"><span class="hljs-meta">#[derive(Resource, Default)]</span></span><span class="cl" id="L27"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Pending</span>(<span class="hljs-keyword">pub</span> SimInput);</span><span class="cl" id="L28"> </span><span class="cl" id="L29"><span class="hljs-comment">/// Where the player was one tick ago, and where they are drawn this frame.</span></span><span class="cl" id="L30"><span class="hljs-meta">#[derive(Resource, Default)]</span></span><span class="cl" id="L31"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rendered</span> {</span><span class="cl" id="L32">    prev_pos: Vec3,</span><span class="cl" id="L33">    prev_yaw: <span class="hljs-type">f32</span>,</span><span class="cl" id="L34">    <span class="hljs-keyword">pub</span> pos: Vec3,</span><span class="cl" id="L35">    <span class="hljs-keyword">pub</span> yaw: <span class="hljs-type">f32</span>,</span><span class="cl" id="L36">    <span class="hljs-comment">/// How far this frame sits between the last two simulation ticks, 0..1.</span></span><span class="cl" id="L37">    <span class="hljs-keyword">pub</span> alpha: <span class="hljs-type">f32</span>,</span><span class="cl" id="L38">}</span><span class="cl" id="L39"> </span><span class="cl" id="L40"><span class="hljs-meta">#[derive(Resource)]</span></span><span class="cl" id="L41"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Options</span> {</span><span class="cl" id="L42">    <span class="hljs-comment">/// Tint the character while invincible.</span></span><span class="cl" id="L43">    <span class="hljs-keyword">pub</span> show_iframes: <span class="hljs-type">bool</span>,</span><span class="cl" id="L44">    <span class="hljs-keyword">pub</span> show_help: <span class="hljs-type">bool</span>,</span><span class="cl" id="L45">}</span><span class="cl" id="L46"> </span><span class="cl" id="L47"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {</span><span class="cl" id="L48">    <span class="hljs-keyword">let</span> <span class="hljs-variable">clips</span> = <span class="hljs-keyword">match</span> anim::Clips::<span class="hljs-title function_ invoke__">load</span>() {</span><span class="cl" id="L49">        <span class="hljs-title function_ invoke__">Ok</span>(clips) =&gt; clips,</span><span class="cl" id="L50">        <span class="hljs-title function_ invoke__">Err</span>(error) =&gt; {</span><span class="cl" id="L51">            <span class="hljs-built_in">eprintln!</span>(</span><span class="cl" id="L52">                <span class="hljs-string">&quot;Could not load {}: {error}</span></span><span class="cl" id="L53"><span>Run it from the project folder, and bake the animations first with:</span></span><span class="cl" id="L54"><span>    python tools/bake_anims.py&quot;</span>,</span><span class="cl" id="L55">                anim::PATH</span><span class="cl" id="L56">            );</span><span class="cl" id="L57">            std::process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);</span><span class="cl" id="L58">        }</span><span class="cl" id="L59">    };</span><span class="cl" id="L60">    <span class="hljs-comment">// Sounds are optional: without them the sandbox runs silent.</span></span><span class="cl" id="L61">    <span class="hljs-keyword">let</span> <span class="hljs-variable">sounds</span> = <span class="hljs-keyword">match</span> audio::Sounds::<span class="hljs-title function_ invoke__">load</span>() {</span><span class="cl" id="L62">        <span class="hljs-title function_ invoke__">Ok</span>(sounds) =&gt; <span class="hljs-title function_ invoke__">Some</span>(sounds),</span><span class="cl" id="L63">        <span class="hljs-title function_ invoke__">Err</span>(error) =&gt; {</span><span class="cl" id="L64">            <span class="hljs-built_in">eprintln!</span>(<span class="hljs-string">&quot;No sound ({}: {error}). Bake it with:</span></span><span class="cl" id="L65"><span>    python tools/bake_sounds.py&quot;</span>, audio::PATH);</span><span class="cl" id="L66">            <span class="hljs-literal">None</span></span><span class="cl" id="L67">        }</span><span class="cl" id="L68">    };</span><span class="cl" id="L69">    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">app</span> = App::<span class="hljs-title function_ invoke__">new</span>();</span><span class="cl" id="L70">    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Some</span>(sounds) = sounds {</span><span class="cl" id="L71">        app.<span class="hljs-title function_ invoke__">insert_resource</span>(sounds);</span><span class="cl" id="L72">    }</span><span class="cl" id="L73">    app</span><span class="cl" id="L74">        .<span class="hljs-title function_ invoke__">add_plugins</span>(DefaultPlugins.<span class="hljs-title function_ invoke__">set</span>(WindowPlugin {</span><span class="cl" id="L75">            primary_window: <span class="hljs-title function_ invoke__">Some</span>(Window {</span><span class="cl" id="L76">                title: <span class="hljs-string">&quot;Tarnished - movement &amp; combat sandbox&quot;</span>.<span class="hljs-title function_ invoke__">into</span>(),</span><span class="cl" id="L77">                ..<span class="hljs-title function_ invoke__">default</span>()</span><span class="cl" id="L78">            }),</span><span class="cl" id="L79">            ..<span class="hljs-title function_ invoke__">default</span>()</span><span class="cl" id="L80">        }))</span><span class="cl" id="L81">        .<span class="hljs-title function_ invoke__">insert_resource</span>(Time::&lt;Fixed&gt;::<span class="hljs-title function_ invoke__">from_hz</span>(sim::data::TICK_HZ))</span><span class="cl" id="L82">        .<span class="hljs-title function_ invoke__">insert_resource</span>(<span class="hljs-title function_ invoke__">ClearColor</span>(Color::<span class="hljs-title function_ invoke__">srgb</span>(<span class="hljs-number">0.07</span>, <span class="hljs-number">0.08</span>, <span class="hljs-number">0.1</span>)))</span><span class="cl" id="L83">        .<span class="hljs-title function_ invoke__">insert_resource</span>(clips)</span><span class="cl" id="L84">        .<span class="hljs-title function_ invoke__">insert_resource</span>(<span class="hljs-title function_ invoke__">Sim</span>(sim::World::<span class="hljs-title function_ invoke__">new</span>(Level::<span class="hljs-title function_ invoke__">arena</span>())))</span><span class="cl" id="L85">        .<span class="hljs-title function_ invoke__">insert_resource</span>(Options { show_iframes: <span class="hljs-literal">true</span>, show_help: <span class="hljs-literal">true</span> })</span><span class="cl" id="L86">        .init_resource::&lt;Pending&gt;()</span><span class="cl" id="L87">        .init_resource::&lt;Rendered&gt;()</span><span class="cl" id="L88">        .init_resource::&lt;camera::CamRig&gt;()</span><span class="cl" id="L89">        .init_resource::&lt;demo::Demo&gt;()</span><span class="cl" id="L90">        .<span class="hljs-title function_ invoke__">add_systems</span>(Startup, (view::setup, rig::setup, hud::setup, camera::setup))</span><span class="cl" id="L91">        .<span class="hljs-title function_ invoke__">add_systems</span>(</span><span class="cl" id="L92">            RunFixedMainLoop,</span><span class="cl" id="L93">            (input::grab_cursor, camera::look, input::gather)</span><span class="cl" id="L94">                .<span class="hljs-title function_ invoke__">chain</span>()</span><span class="cl" id="L95">                .<span class="hljs-title function_ invoke__">in_set</span>(RunFixedMainLoopSystems::BeforeFixedMainLoop),</span><span class="cl" id="L96">        )</span><span class="cl" id="L97">        .<span class="hljs-title function_ invoke__">add_systems</span>(FixedUpdate, (demo::drive, tick).<span class="hljs-title function_ invoke__">chain</span>())</span><span class="cl" id="L98">        .<span class="hljs-title function_ invoke__">add_systems</span>(</span><span class="cl" id="L99">            Update,</span><span class="cl" id="L100">            (</span><span class="cl" id="L101">                demo::control,</span><span class="cl" id="L102">                interpolate,</span><span class="cl" id="L103">                input::debug_keys,</span><span class="cl" id="L104">                rig::animate,</span><span class="cl" id="L105">                audio::play,</span><span class="cl" id="L106">                view::animate_dummy,</span><span class="cl" id="L107">                view::draw_grid,</span><span class="cl" id="L108">                camera::follow,</span><span class="cl" id="L109">                hud::update,</span><span class="cl" id="L110">            )</span><span class="cl" id="L111">                .<span class="hljs-title function_ invoke__">chain</span>(),</span><span class="cl" id="L112">        )</span><span class="cl" id="L113">        .<span class="hljs-title function_ invoke__">run</span>();</span><span class="cl" id="L114">}</span><span class="cl" id="L115"> </span><span class="cl" id="L116"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">tick</span>(</span><span class="cl" id="L117">    <span class="hljs-keyword">mut</span> sim: ResMut&lt;Sim&gt;,</span><span class="cl" id="L118">    <span class="hljs-keyword">mut</span> pending: ResMut&lt;Pending&gt;,</span><span class="cl" id="L119">    <span class="hljs-keyword">mut</span> rendered: ResMut&lt;Rendered&gt;,</span><span class="cl" id="L120">    <span class="hljs-keyword">mut</span> cam: ResMut&lt;camera::CamRig&gt;,</span><span class="cl" id="L121">) {</span><span class="cl" id="L122">    rendered.prev_pos = sim.<span class="hljs-number">0</span>.player.pos;</span><span class="cl" id="L123">    rendered.prev_yaw = sim.<span class="hljs-number">0</span>.player.yaw;</span><span class="cl" id="L124">    sim.<span class="hljs-number">0</span>.<span class="hljs-title function_ invoke__">step</span>(&amp;pending.<span class="hljs-number">0</span>);</span><span class="cl" id="L125">    <span class="hljs-keyword">if</span> sim.<span class="hljs-number">0</span>.recenter_camera {</span><span class="cl" id="L126">        cam.<span class="hljs-title function_ invoke__">recenter_on</span>(sim.<span class="hljs-number">0</span>.player.yaw);</span><span class="cl" id="L127">    }</span><span class="cl" id="L128"> </span><span class="cl" id="L129">    <span class="hljs-comment">// Edges have been consumed; held state carries over.</span></span><span class="cl" id="L130">    <span class="hljs-keyword">let</span> <span class="hljs-variable">inp</span> = &amp;<span class="hljs-keyword">mut</span> pending.<span class="hljs-number">0</span>;</span><span class="cl" id="L131">    <span class="hljs-keyword">for</span> <span class="hljs-variable">button</span> <span class="hljs-keyword">in</span> [&amp;<span class="hljs-keyword">mut</span> inp.dodge, &amp;<span class="hljs-keyword">mut</span> inp.jump, &amp;<span class="hljs-keyword">mut</span> inp.light, &amp;<span class="hljs-keyword">mut</span> inp.heavy, &amp;<span class="hljs-keyword">mut</span> inp.guard] {</span><span class="cl" id="L132">        button.pressed = <span class="hljs-literal">false</span>;</span><span class="cl" id="L133">        button.released = <span class="hljs-literal">false</span>;</span><span class="cl" id="L134">    }</span><span class="cl" id="L135">    inp.crouch = <span class="hljs-literal">false</span>;</span><span class="cl" id="L136">    inp.lock = <span class="hljs-literal">false</span>;</span><span class="cl" id="L137">    inp.two_hand_right = <span class="hljs-literal">false</span>;</span><span class="cl" id="L138">    inp.two_hand_left = <span class="hljs-literal">false</span>;</span><span class="cl" id="L139">    inp.next_weapon = <span class="hljs-literal">false</span>;</span><span class="cl" id="L140">    inp.next_left = <span class="hljs-literal">false</span>;</span><span class="cl" id="L141">}</span><span class="cl" id="L142"> </span><span class="cl" id="L143"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">interpolate</span>(sim: Res&lt;Sim&gt;, time: Res&lt;Time&lt;Fixed&gt;&gt;, <span class="hljs-keyword">mut</span> rendered: ResMut&lt;Rendered&gt;) {</span><span class="cl" id="L144">    <span class="hljs-keyword">let</span> <span class="hljs-variable">alpha</span> = time.<span class="hljs-title function_ invoke__">overstep_fraction</span>();</span><span class="cl" id="L145">    <span class="hljs-keyword">let</span> <span class="hljs-variable">player</span> = &amp;sim.<span class="hljs-number">0</span>.player;</span><span class="cl" id="L146">    <span class="hljs-comment">// A respawn is a teleport, not something to glide across.</span></span><span class="cl" id="L147">    <span class="hljs-keyword">let</span> <span class="hljs-variable">alpha</span> = <span class="hljs-keyword">if</span> rendered.prev_pos.<span class="hljs-title function_ invoke__">distance</span>(player.pos) &gt; <span class="hljs-number">3.0</span> { <span class="hljs-number">1.0</span> } <span class="hljs-keyword">else</span> { alpha };</span><span class="cl" id="L148">    rendered.alpha = alpha;</span><span class="cl" id="L149">    rendered.pos = rendered.prev_pos.<span class="hljs-title function_ invoke__">lerp</span>(player.pos, alpha);</span><span class="cl" id="L150">    rendered.yaw = rendered.prev_yaw + sim::<span class="hljs-title function_ invoke__">angle_diff</span>(rendered.prev_yaw, player.yaw) * alpha;</span><span class="cl" id="L151">}</span><span class="cl" id="L152"> </span></code></pre></div>
+<p style="color:var(--dim);font-size:12.5px;margin-top:8px">Click a line number to copy a permalink to that line.</p>
+<script>
+(function(){
+  var b = document.querySelector('.filehead .copy');
+  if (b) b.addEventListener('click', function(){
+    var t = document.querySelector('.code').innerText;
+    function done(){ b.textContent = 'Copied ✓'; setTimeout(function(){ b.textContent = 'Copy file'; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ fb(); }); else fb();
+    function fb(){ var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e) {} ta.remove(); done(); }
+  });
+})();
+</script><div class="navfiles"><a class="prev" href="/files/src/input.rs.html">← src/input.rs</a><a class="next" href="/files/src/rig.rs.html">src/rig.rs →</a></div></main>
+</div>
+<footer>Served from a VM via a temporary Cloudflare quick tunnel · generated Thu, 08 Oct 2026 21:22:31 GMT · upstream repo is MIT licensed ·
+shortcuts: <span class="kbd">/</span> search · <span class="kbd">t</span> theme · <span class="kbd">[</span>/<span class="kbd">]</span> prev/next file</footer>
+<script>
+(function(){
+  var saved = null;
+  try { saved = localStorage.getItem('er-theme'); } catch(e) {}
+  if (saved === 'light') setTheme('light');
+  function setTheme(t) {
+    document.body.classList.toggle('light', t === 'light');
+    var d = document.getElementById('hljs-dark'), l = document.getElementById('hljs-light');
+    if (d && l) { d.disabled = (t === 'light'); l.disabled = (t !== 'light'); }
+    try { localStorage.setItem('er-theme', t); } catch(e) {}
+  }
+  var themeBtn = document.getElementById('theme');
+  if (themeBtn) themeBtn.addEventListener('click', function(){ setTheme(document.body.classList.contains('light') ? 'dark' : 'light'); });
+
+  var ham = document.getElementById('hamburger'), side = document.getElementById('sidebar');
+  if (ham && side) ham.addEventListener('click', function(){ side.classList.toggle('open'); });
+
+  document.addEventListener('keydown', function(e){
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === '/') { e.preventDefault(); var s = document.querySelector('header input.search'); if (s) s.focus(); }
+    else if (e.key === 't') { setTheme(document.body.classList.contains('light') ? 'dark' : 'light'); }
+    else if (e.key === '[') { var p = document.querySelector('.navfiles .prev'); if (p) location.href = p.href; }
+    else if (e.key === ']') { var n = document.querySelector('.navfiles .next'); if (n) location.href = n.href; }
+  });
+
+  var filter = document.getElementById('filter');
+  if (filter) filter.addEventListener('input', function(){
+    var q = filter.value.trim().toLowerCase();
+    document.querySelectorAll('.tree a').forEach(function(a){
+      var hit = !q || (a.dataset.name && a.dataset.name.includes(q)) || (a.dataset.path && a.dataset.path.includes(q));
+      a.classList.toggle('hidden', !hit);
+    });
+    document.querySelectorAll('.tree details').forEach(function(d){ if (q) d.open = true; });
+  });
+
+  // copy buttons on markdown code fences
+  document.querySelectorAll('main pre > code').forEach(function(code){
+    var pre = code.parentElement;
+    if (pre.parentElement && pre.parentElement.classList.contains('codewrap')) return;
+    pre.classList.add('mdpre');
+    var b = document.createElement('button');
+    b.className = 'btn copy'; b.textContent = 'Copy';
+    b.addEventListener('click', function(){
+      var t = code.innerText;
+      function done(){ b.textContent = 'Copied ✓'; setTimeout(function(){ b.textContent = 'Copy'; }, 1500); }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ fallback(); });
+      else fallback();
+      function fallback(){ var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e) {} ta.remove(); done(); }
+    });
+    pre.appendChild(b);
+  });
+
+  // gutter line numbers copy permalinks
+  document.querySelectorAll('.gutter a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var href = a.getAttribute('href');
+      var url = location.origin + location.pathname + href;
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).catch(function(){});
+      var el = document.getElementById(href.slice(1));
+      if (el) { el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); }, 1200); }
+      history.replaceState(null, '', href);
+      a.textContent = '✓'; setTimeout(function(){ a.textContent = a.dataset.n; }, 1200);
+    });
+  });
+
+  // highlight the line from the incoming hash
+  function flashHash(){
+    var h = location.hash;
+    if (h && h.indexOf('#L') === 0) {
+      var el = document.getElementById(h.slice(1));
+      if (el) { el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); }, 1500); el.scrollIntoView({block:'center'}); }
+    }
+  }
+  window.addEventListener('hashchange', flashHash);
+  flashHash();
+})();
+</script>
+</body></html>

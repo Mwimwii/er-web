@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>README.md · Elden Ring Combat Rewrite</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%9A%94%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/hljs/github-dark.min.css" id="hljs-dark">
+<link rel="stylesheet" href="/hljs/github.min.css" id="hljs-light" disabled>
+<style>
+:root{--bg:#0e0d0b;--panel:#171512;--panel2:#1e1a15;--border:#2e2820;--gold:#c8a24a;--gold2:#e8cf8a;--fg:#e6dfcf;--dim:#9a917e;--code:#14120f;}
+body.light{--bg:#f6f1e7;--panel:#fffdf6;--panel2:#f1ead9;--border:#ddd2b8;--gold:#8a6d1f;--gold2:#6e5514;--fg:#2b2517;--dim:#6f6650;--code:#fbf7ec;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;transition:background .15s,color .15s}
+a{color:var(--gold2);text-decoration:none}a:hover{text-decoration:underline}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 18px;background:var(--panel);border-bottom:1px solid var(--border)}
+header .brand{font-weight:700;color:var(--gold);letter-spacing:.4px;white-space:nowrap}
+header .sub{color:var(--dim);font-size:12.5px;white-space:nowrap}
+header .spacer{flex:1}
+header form{display:flex;gap:6px}
+header input.search{width:200px;background:var(--code);border:1px solid var(--border);border-radius:6px;color:var(--fg);padding:6px 10px;font-size:13px}
+header input.search:focus{outline:none;border-color:var(--gold)}
+header a.btn,header button.btn{font-size:12.5px;border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--fg);background:var(--panel2);white-space:nowrap;cursor:pointer}
+header a.btn:hover,header button.btn:hover{border-color:var(--gold);color:var(--gold2);text-decoration:none}
+button.btn{font-size:12.5px;border:1px solid var(--border);border-radius:6px;padding:4px 11px;color:var(--fg);background:var(--panel2);cursor:pointer}
+button.btn:hover{border-color:var(--gold);color:var(--gold2)}
+.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 46px)}
+aside{border-right:1px solid var(--border);background:var(--panel);padding:14px 10px 40px;overflow:auto;max-height:calc(100vh - 46px);position:sticky;top:46px}
+aside .filter{width:100%;background:var(--code);border:1px solid var(--border);border-radius:6px;color:var(--fg);padding:7px 9px;font-size:13px;margin-bottom:10px}
+.tree,.tree ul{list-style:none;margin:0;padding-left:12px}
+.tree{padding-left:0;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.tree summary{cursor:pointer;color:var(--dim);padding:2px 0}
+.tree summary::marker{color:var(--gold)}
+.tree a{display:block;padding:1.5px 6px;border-radius:5px;color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px}
+.tree a:hover{background:var(--panel2);text-decoration:none}
+.tree a.active{background:var(--panel2);color:var(--gold2);box-shadow:inset 2px 0 0 var(--gold)}
+main{padding:30px 44px 60px;max-width:1000px;min-width:0}
+h1,h2,h3,h4{color:var(--gold2);font-weight:650;line-height:1.3}
+h1{font-size:29px;border-bottom:1px solid var(--border);padding-bottom:12px;margin-top:6px}
+h2{font-size:22px;margin-top:38px;border-bottom:1px solid var(--border);padding-bottom:6px}h3{font-size:18px;margin-top:28px}
+h4{font-size:16px;margin-top:22px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:18px 0}
+.card h3{margin-top:0}
+.kv{display:grid;grid-template-columns:180px 1fr;gap:4px 14px;font-size:14px;margin:0}
+.kv dt{color:var(--dim)}.kv dd{margin:0}
+.badges span{display:inline-block;background:var(--panel2);border:1px solid var(--border);color:var(--gold2);border-radius:20px;padding:1px 12px;font-size:12px;margin:0 6px 6px 0}
+pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.55}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code,td code,h code{background:var(--code);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:.88em}
+blockquote{border-left:3px solid var(--gold);margin:14px 0;padding:2px 16px;color:var(--dim);background:var(--panel);border-radius:0 6px 6px 0}
+table{border-collapse:collapse;margin:14px 0;width:100%;display:block;overflow:auto}
+th,td{border:1px solid var(--border);padding:6px 12px;text-align:left}
+th{background:var(--panel2);color:var(--gold2)}
+img,video{max-width:100%;border-radius:8px;border:1px solid var(--border)}
+hr{border:none;border-top:1px solid var(--border);margin:26px 0}
+.crumbs{color:var(--dim);font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace;margin-bottom:10px;word-break:break-all}
+.filehead{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;color:var(--dim);flex-wrap:wrap}
+.filehead .path{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--fg)}
+.navfiles{display:flex;justify-content:space-between;gap:10px;margin:14px 0 26px;font-size:13.5px}
+.navfiles a{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.navfiles .next{margin-left:auto;text-align:right}
+.codewrap{display:flex;overflow:auto;background:var(--code);border:1px solid var(--border);border-radius:8px}
+.gutter{position:sticky;left:0;flex:none;background:var(--code);border-right:1px solid var(--border);user-select:none;z-index:2}
+.gutter a,.code .cl{display:block;height:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
+.gutter a{color:var(--dim);text-align:right;padding:0 12px 0 16px;text-decoration:none}
+.gutter a:hover{color:var(--gold2);text-decoration:none}
+.code{flex:1;min-width:0;margin:0;padding:14px 18px;border:none;border-radius:0;overflow:visible;background:transparent}
+.code .cl{padding:0 4px}
+.code .cl:target,.code .cl.flash{background:rgba(200,162,74,.16);box-shadow:inset 2px 0 0 var(--gold)}
+pre code.hljs{background:transparent;padding:0;display:block}
+.mdpre{position:relative}
+.mdpre .copy{position:absolute;top:8px;right:8px;opacity:.75}
+.hidden{display:none!important}
+mark{background:#6b5a1e;color:#ffe9a8;border-radius:2px;padding:0 1px}
+body.light mark{background:#f0d98c;color:#3a2f10}
+footer{color:var(--dim);font-size:12.5px;border-top:1px solid var(--border);padding:16px 44px;margin-top:20px}
+.toc{columns:2;column-gap:34px}
+.toc a{display:block;padding:2px 0;font-size:13.5px}
+.kbd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;background:var(--panel2);border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--fg)}
+#hamburger{display:none}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  aside{position:fixed;left:0;top:46px;bottom:0;width:270px;z-index:15;transform:translateX(-100%);transition:transform .18s;box-shadow:6px 0 24px rgba(0,0,0,.4)}
+  aside.open{transform:none}
+  main{padding:18px 16px 60px;max-width:100%}
+  #hamburger{display:inline-block}
+  header .sub{display:none}
+  header input.search{width:110px}
+  footer{padding:16px}
+  .toc{columns:1}
+}
+</style>
+</head><body>
+<header>
+  <button class="btn" id="hamburger" aria-label="Toggle file tree">☰</button>
+  <a class="brand" href="/">⚔ ER Combat Rewrite</a>
+  <span class="sub">af95e33</span>
+  <span class="spacer"></span>
+  <form action="/search.html" method="get"><input class="search" name="q" type="search" placeholder="Search files…  ( / )" autocomplete="off"></form>
+  <button class="btn" id="theme" title="Toggle light/dark (t)">◐</button>
+  <a class="btn" href="https://github.com/Mwimwii/er-web" target="_blank">GitHub ↗</a>
+</header>
+<div class="layout">
+<aside id="sidebar">
+  <input class="filter" id="filter" type="search" placeholder="Filter files… (e.g. player.rs)">
+  <ul class="tree"><li><details open><summary title="src/" data-name="src">src/</summary><ul class="tree"><li><details open><summary title="sim/" data-name="sim">sim/</summary><ul class="tree"><li><a href="/files/src/sim/data.rs.html" title="src/sim/data.rs" data-name="data.rs" data-path="src/sim/data.rs">data.rs</a></li><li><a href="/files/src/sim/dummy.rs.html" title="src/sim/dummy.rs" data-name="dummy.rs" data-path="src/sim/dummy.rs">dummy.rs</a></li><li><a href="/files/src/sim/level.rs.html" title="src/sim/level.rs" data-name="level.rs" data-path="src/sim/level.rs">level.rs</a></li><li><a href="/files/src/sim/mod.rs.html" title="src/sim/mod.rs" data-name="mod.rs" data-path="src/sim/mod.rs">mod.rs</a></li><li><a href="/files/src/sim/player.rs.html" title="src/sim/player.rs" data-name="player.rs" data-path="src/sim/player.rs">player.rs</a></li><li><a href="/files/src/sim/tests.rs.html" title="src/sim/tests.rs" data-name="tests.rs" data-path="src/sim/tests.rs">tests.rs</a></li></ul></details></li><li><a href="/files/src/anim.rs.html" title="src/anim.rs" data-name="anim.rs" data-path="src/anim.rs">anim.rs</a></li><li><a href="/files/src/audio.rs.html" title="src/audio.rs" data-name="audio.rs" data-path="src/audio.rs">audio.rs</a></li><li><a href="/files/src/camera.rs.html" title="src/camera.rs" data-name="camera.rs" data-path="src/camera.rs">camera.rs</a></li><li><a href="/files/src/demo.rs.html" title="src/demo.rs" data-name="demo.rs" data-path="src/demo.rs">demo.rs</a></li><li><a href="/files/src/hud.rs.html" title="src/hud.rs" data-name="hud.rs" data-path="src/hud.rs">hud.rs</a></li><li><a href="/files/src/input.rs.html" title="src/input.rs" data-name="input.rs" data-path="src/input.rs">input.rs</a></li><li><a href="/files/src/main.rs.html" title="src/main.rs" data-name="main.rs" data-path="src/main.rs">main.rs</a></li><li><a href="/files/src/rig.rs.html" title="src/rig.rs" data-name="rig.rs" data-path="src/rig.rs">rig.rs</a></li><li><a href="/files/src/view.rs.html" title="src/view.rs" data-name="view.rs" data-path="src/view.rs">view.rs</a></li></ul></details></li><li><details open><summary title="tools/" data-name="tools">tools/</summary><ul class="tree"><li><details open><summary title="ww2ogg/" data-name="ww2ogg">ww2ogg/</summary><ul class="tree"><li><a href="/files/tools/ww2ogg/COPYING.html" title="tools/ww2ogg/COPYING" data-name="copying" data-path="tools/ww2ogg/copying">COPYING</a></li><li><a href="/files/tools/ww2ogg/packed_codebooks_aoTuV_603.bin.html" title="tools/ww2ogg/packed_codebooks_aoTuV_603.bin" data-name="packed_codebooks_aotuv_603.bin" data-path="tools/ww2ogg/packed_codebooks_aotuv_603.bin">packed_codebooks_aoTuV_603.bin</a></li></ul></details></li><li><a href="/files/tools/bake_anims.py.html" title="tools/bake_anims.py" data-name="bake_anims.py" data-path="tools/bake_anims.py">bake_anims.py</a></li><li><a href="/files/tools/bake_sounds.py.html" title="tools/bake_sounds.py" data-name="bake_sounds.py" data-path="tools/bake_sounds.py">bake_sounds.py</a></li><li><a href="/files/tools/erfmt.py.html" title="tools/erfmt.py" data-name="erfmt.py" data-path="tools/erfmt.py">erfmt.py</a></li><li><a href="/files/tools/extract.py.html" title="tools/extract.py" data-name="extract.py" data-path="tools/extract.py">extract.py</a></li><li><a href="/files/tools/hkanim.py.html" title="tools/hkanim.py" data-name="hkanim.py" data-path="tools/hkanim.py">hkanim.py</a></li><li><a href="/files/tools/hkx.py.html" title="tools/hkx.py" data-name="hkx.py" data-path="tools/hkx.py">hkx.py</a></li><li><a href="/files/tools/param.py.html" title="tools/param.py" data-name="param.py" data-path="tools/param.py">param.py</a></li><li><a href="/files/tools/paths.py.html" title="tools/paths.py" data-name="paths.py" data-path="tools/paths.py">paths.py</a></li><li><a href="/files/tools/setup.py.html" title="tools/setup.py" data-name="setup.py" data-path="tools/setup.py">setup.py</a></li><li><a href="/files/tools/skel.py.html" title="tools/skel.py" data-name="skel.py" data-path="tools/skel.py">skel.py</a></li><li><a href="/files/tools/tae.py.html" title="tools/tae.py" data-name="tae.py" data-path="tools/tae.py">tae.py</a></li><li><a href="/files/tools/wem.py.html" title="tools/wem.py" data-name="wem.py" data-path="tools/wem.py">wem.py</a></li><li><a href="/files/tools/wwise.py.html" title="tools/wwise.py" data-name="wwise.py" data-path="tools/wwise.py">wwise.py</a></li></ul></details></li><li><a href="/files/.gitignore.html" title=".gitignore" data-name=".gitignore" data-path=".gitignore">.gitignore</a></li><li><a href="/files/audit.sh.html" title="audit.sh" data-name="audit.sh" data-path="audit.sh">audit.sh</a></li><li><a href="/files/build.rs.html" title="build.rs" data-name="build.rs" data-path="build.rs">build.rs</a></li><li><a href="/files/Cargo.lock.html" title="Cargo.lock" data-name="cargo.lock" data-path="cargo.lock">Cargo.lock</a></li><li><a href="/files/Cargo.toml.html" title="Cargo.toml" data-name="cargo.toml" data-path="cargo.toml">Cargo.toml</a></li><li><a href="/files/gen.mjs.html" title="gen.mjs" data-name="gen.mjs" data-path="gen.mjs">gen.mjs</a></li><li><a href="/files/LICENSE.md.html" title="LICENSE.md" data-name="license.md" data-path="license.md">LICENSE.md</a></li><li><a href="/files/package-lock.json.html" title="package-lock.json" data-name="package-lock.json" data-path="package-lock.json">package-lock.json</a></li><li><a href="/files/package.json.html" title="package.json" data-name="package.json" data-path="package.json">package.json</a></li><li><a href="/files/README.md.html" title="README.md" data-name="readme.md" data-path="readme.md">README.md</a></li><li><a href="/files/server.mjs.html" title="server.mjs" data-name="server.mjs" data-path="server.mjs">server.mjs</a></li><li><a href="/files/verify-static.sh.html" title="verify-static.sh" data-name="verify-static.sh" data-path="verify-static.sh">verify-static.sh</a></li></ul>
+</aside>
+<main><div class="crumbs">README.md</div><div class="card"><h3>Contents</h3><div class="toc"><a href="#what-is-in-it" style="">What is in it</a><a href="#movement" style="padding-left:16px;color:var(--dim)">Movement</a><a href="#dodging" style="padding-left:16px;color:var(--dim)">Dodging</a><a href="#combat" style="padding-left:16px;color:var(--dim)">Combat</a><a href="#weapons" style="padding-left:16px;color:var(--dim)">Weapons</a><a href="#the-sparring-dummy" style="padding-left:16px;color:var(--dim)">The sparring dummy</a><a href="#the-arena" style="padding-left:16px;color:var(--dim)">The arena</a><a href="#the-demo" style="padding-left:16px;color:var(--dim)">The demo</a><a href="#sound-optional" style="padding-left:16px;color:var(--dim)">Sound (optional)</a><a href="#how-faithful-it-is" style="">How faithful it is</a><a href="#controls" style="">Controls</a><a href="#setup" style="">Setup</a><a href="#layout" style="">Layout</a><a href="#a-note-on-the-data" style="">A note on the data</a><a href="#license" style="">License</a></div></div><h1 id="elden-ring-player-movement-and-combat-in-bevy">Elden Ring player movement and combat, in Bevy</h1><p>A sandbox that recreates how the player character moves and fights in
+ELDEN RING, written in Rust on <a href="https://bevyengine.org">Bevy</a> 0.19.</p>
+<p>The character is a stick-and-capsule rig, but what drives it is real: the
+timings, movement and animations are read from the game&#39;s own files rather
+than tuned by eye.</p>
+<p><a href="https://github.com/user-attachments/assets/0b80042e-a40b-4a15-a64e-e75e20966ace">https://github.com/user-attachments/assets/0b80042e-a40b-4a15-a64e-e75e20966ace</a></p>
+<p><em>Off-hand weapons, paired attacks and hit-stop, played by hand.</em></p>
+<p><a href="https://github.com/user-attachments/assets/b58dbb0d-a3db-46d5-82ee-d9152503e40c">https://github.com/user-attachments/assets/b58dbb0d-a3db-46d5-82ee-d9152503e40c</a></p>
+<p><em>The sandbox playing itself through everything it does (an earlier build).</em></p>
+<p>This is a fan project for study. It is not affiliated with or endorsed by
+FromSoftware or Bandai Namco. Nothing from the game is in this repository,
+only code: to build and run it you need your own copy of the game, from which
+the tools here generate the data.</p>
+<h2 id="what-is-in-it">What is in it</h2><h3 id="movement">Movement</h3><ul>
+<li>Walk, run and sprint, with the braking animation when you stop from a run.</li>
+<li>Crouching, with its own idle, walk, run, stop, and the animations for
+crouching down and standing back up.</li>
+<li>Lock-on: strafing around the target in four directions while facing it.</li>
+<li>Jumps from a standstill, a walk, a run and a sprint. Locked on, walking and
+running jumps go forward, back, left or right while you keep facing the
+target, and so do their landings.</li>
+<li>Falling: a separate start when you walk off a ledge, light and heavy
+landings, fall damage and fall death.</li>
+<li>Stairs and slopes, with each foot placed on the ground under it.</li>
+</ul>
+<h3 id="dodging">Dodging</h3><ul>
+<li>Rolls come out when the button is released; holding it sprints instead.</li>
+<li>Light, medium and heavy equip-load rolls, backsteps and crouched rolls.</li>
+<li>Rolls in four directions while locked on.</li>
+</ul>
+<h3 id="combat">Combat</h3><ul>
+<li>Light attack chains, heavy and charged heavy attacks.</li>
+<li>Running, rolling, backstep, crouch, jump and guard-counter attacks.</li>
+<li>Attacks with several hits land every one of them, each with its own damage
+and stamina cost.</li>
+<li>Hits land when the weapon itself reaches the target, not when the swing
+starts: stand too far away, or beside a thrust, and it misses.</li>
+<li>Hit-stop: attacker and target freeze for an instant when a blow lands.</li>
+<li>Guarding with the shield, or with any weapon held in both hands; guard
+hits and guard break.</li>
+<li>The left hand: a shield, a torch, nothing, or a second weapon. Anything
+but the shield attacks on the guard button, with that weapon&#39;s own
+left-hand chain.</li>
+<li>Paired weapons (&quot;power stance&quot;): the same class in each hand turns the
+left button into a moveset that uses both, with its own chain and its own
+running, rolling, backstep and jump attacks. 22 of the classes have one.</li>
+<li>Hit reactions in four strengths and four directions: a flinch, a stagger, a
+large stagger, and a knockdown that throws you back, keeps you invincible
+while you are down and lets you roll out early.</li>
+<li>Changing grip or weapon plays on the upper body while you keep moving.</li>
+</ul>
+<h3 id="weapons">Weapons</h3><p>24 classes, each usable one- or two-handed with its own moveset either way:
+Dagger, Longsword, Claymore, Greatsword, Rapier, Uchigatana, Club, Battle Axe,
+Short Spear, Halberd, Heavy Thrusting Sword, Curved Sword, Curved Greatsword,
+Twinblade, Great Hammer, Flail, Greataxe, Great Spear, Reaper, Whip, Fist,
+Claw, Colossal Weapon and Torch, plus a Shield. Any of them can go in the
+left hand, and whatever is there can be two-handed too.</p>
+<h3 id="the-sparring-dummy">The sparring dummy</h3><p>It stands still until you press <code>T</code>. Hostile, it cycles through four attacks,
+one for each hit reaction:</p>
+<table>
+<thead>
+<tr>
+<th>Attack</th>
+<th>Telegraph</th>
+<th>Reaction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Overhead slam</td>
+<td>orange</td>
+<td>stagger</td>
+</tr>
+<tr>
+<td>Low sweep (jump it)</td>
+<td>blue</td>
+<td>flinch</td>
+</tr>
+<tr>
+<td>Harder slam</td>
+<td>red</td>
+<td>large stagger</td>
+</tr>
+<tr>
+<td>Hardest slam</td>
+<td>purple</td>
+<td>knockdown</td>
+</tr>
+</tbody></table>
+<h3 id="the-arena">The arena</h3><p>Crates stacked into a climb up to a wall you can walk along, a platform
+across a gap from it, a slope, a row of pillars, a low dais, and a staircase
+21 m high that passes every fall-damage threshold on the way up.</p>
+<h3 id="the-demo">The demo</h3><p>Press <code>Enter</code> and the sandbox plays itself through everything above, with a
+caption for each thing it shows: about five minutes, made for recording.
+<code>Enter</code> again stops it. It resets the arena when it starts, and plays through
+the same inputs a player has, so nothing in it is staged.</p>
+<h3 id="sound-optional">Sound (optional)</h3><p>With the game&#39;s sound banks unpacked, the sandbox plays the game&#39;s own
+footsteps, cloth and armour movement, swings and landings, on the frames the
+animations call for them, chosen and mixed the way the Wwise banks say.
+Without the banks it runs silent.</p>
+<h2 id="how-faithful-it-is">How faithful it is</h2><p>Read from the game&#39;s files:</p>
+<ul>
+<li>Every action&#39;s length, hit windows, i-frames, cancel windows and input window.</li>
+<li>Root motion for every action, and walk / run / sprint / crouch speeds.</li>
+<li>Stamina costs (each hit of an attack, rolls, backsteps, jumps), motion
+values and each weapon&#39;s base attack.</li>
+<li>Hit-stop time of every attack.</li>
+<li>Max HP and stamina: the Vagabond starting class at its starting level,
+through the game&#39;s stat curves.</li>
+<li>Changing grip or weapon: its animations and when the change takes effect.</li>
+<li>The player skeleton and the animations themselves.</li>
+<li>Which sounds each animation plays and on which frame, which recordings each
+sound picks from, their volumes, and each weapon&#39;s swing-sound offset.</li>
+</ul>
+<p>Still estimated (all marked <code>ESTIMATE</code> in <code>src/sim/data.rs</code>):</p>
+<ul>
+<li>How long the dodge button must be held for a sprint.</li>
+<li>Stamina regeneration and sprint drain.</li>
+<li>Gravity after a jump&#39;s arc ends, and the fall-damage thresholds.</li>
+<li>Locomotion acceleration and turn rates.</li>
+<li>Hit shapes. A hit lands when a capsule along the weapon&#39;s striking part
+touches the dummy, and the weapon follows the real animation, but where
+that part sits on each weapon and how thick the capsule is follow the
+sandbox&#39;s stand-in weapon models, not the game&#39;s.</li>
+<li>The dummy: its attacks, damage and timing are made up for testing.</li>
+</ul>
+<p>Which animation belongs to which action is partly inferred from the data,
+because the game decides that in a compiled script this project does not
+read. Two inferences worth knowing about:</p>
+<ul>
+<li>Which large-stagger animation answers a hit from which side is picked from
+the way the head snaps.</li>
+<li>In a paired attack, which hit belongs to which hand is read from how the
+game numbers them, checked against which weapon is moving at the time.</li>
+<li>An attack that follows a running, rolling, backstep or crouch attack goes
+straight into the second light attack. The game has short transition clips
+there, but they carry no timing of their own.</li>
+</ul>
+<p>Not included: weapon skills, parrying, stat scaling, the two-handing damage
+bonus, and being launched into the air by a hit. The rig is primitives: the hands are mittens that fold at the knuckles, with
+a thumb, and cloth and faces are not drawn, and animation blending is simpler
+than the game&#39;s.</p>
+<p>Sound is the player&#39;s alone and not positional. Where the game picks a sound
+from the surroundings, the sandbox bakes one choice: dirt underfoot, leather
+armour and cloth shoes (<code>FLOOR_MATERIAL</code>, <code>ARMOUR_MATERIAL</code> and <code>SWITCHES</code> in
+<code>tools/bake_sounds.py</code>). Pitch and level vary a little each time, as the game
+does. A few weapon classes whose swings live in banks outside <code>cs_main</code> swing
+silently.</p>
+<h2 id="controls">Controls</h2><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Keyboard / mouse</th>
+<th>Gamepad</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Move / look</td>
+<td>WASD / mouse</td>
+<td>Left stick / right stick</td>
+</tr>
+<tr>
+<td>Walk</td>
+<td>Left Alt</td>
+<td>Tilt lightly</td>
+</tr>
+<tr>
+<td>Roll or backstep</td>
+<td>Tap Space</td>
+<td>Tap B</td>
+</tr>
+<tr>
+<td>Sprint</td>
+<td>Hold Space</td>
+<td>Hold B</td>
+</tr>
+<tr>
+<td>Jump</td>
+<td>F</td>
+<td>A</td>
+</tr>
+<tr>
+<td>Crouch</td>
+<td>X</td>
+<td>L3</td>
+</tr>
+<tr>
+<td>Light attack</td>
+<td>Left click</td>
+<td>RB</td>
+</tr>
+<tr>
+<td>Heavy attack (hold to charge)</td>
+<td>Shift + left click</td>
+<td>RT</td>
+</tr>
+<tr>
+<td>Guard, or left-hand attack</td>
+<td>Right click</td>
+<td>LB</td>
+</tr>
+<tr>
+<td>Guard counter</td>
+<td>Shift + left click after blocking a hit</td>
+<td>RT after blocking a hit</td>
+</tr>
+<tr>
+<td>Two-hand right weapon</td>
+<td>E + left click</td>
+<td>Y + RB</td>
+</tr>
+<tr>
+<td>Two-hand left armament</td>
+<td>E + right click</td>
+<td>Y + LB</td>
+</tr>
+<tr>
+<td>Next weapon</td>
+<td>Right arrow</td>
+<td>D-pad right</td>
+</tr>
+<tr>
+<td>Next off-hand (shield, nothing, torch, each weapon)</td>
+<td>Left arrow</td>
+<td>D-pad left</td>
+</tr>
+<tr>
+<td>Lock on</td>
+<td>Q or middle click</td>
+<td>R3</td>
+</tr>
+</tbody></table>
+<p>Sandbox keys: <code>1</code> / <code>2</code> / <code>3</code> set light / medium / heavy equip load, <code>T</code> makes
+the dummy hostile, <code>F1</code> toggles the i-frame tint, <code>H</code> toggles the help overlay,
+<code>Enter</code> plays the demo,
+<code>Esc</code> releases the mouse. Click the window to capture the mouse.</p>
+<h2 id="setup">Setup</h2><p>You need Rust, Python 3.10 or newer, and Windows (the tools load the game&#39;s
+own decompression DLL).</p>
+<p>Generated files are deliberately not in the repository, because they are
+derived from the game: the action table (<code>src/sim/extracted.rs</code>), the baked
+animations (<code>assets/player_anims.bin</code>) and the sounds
+(<code>assets/player_sounds.bin</code>, <code>assets/sounds/</code>). The project will not compile
+or run until you generate the first two from your own game files. That is one
+command once the files are unpacked.</p>
+<ol>
+<li><p><strong>Unpack the game files.</strong> The archives are encrypted, so this step uses
+community tools:</p>
+<ul>
+<li>With UXM Selective Unpack, unpack only these from <code>chr/</code>:
+<code>c0000.anibnd.dcx</code>, <code>c0000_a00_hi</code>, <code>c0000_a00_lo</code>, <code>c0000_a00_md</code>,
+<code>c0000_a0x</code>, <code>c0000_a1x</code>, <code>c0000_a2x</code>, <code>c0000_a3x</code> and <code>c0000_a4x</code>
+(each <code>.anibnd.dcx</code>). Use <strong>Unpack</strong> only, never <strong>Patch</strong>.</li>
+<li>With WitchyBND, unpack <code>regulation.bin</code> into a <code>regulation-bin</code> folder.</li>
+<li>Optional, for sound: also unpack <code>sd/cs_smain.bnk</code> and
+<code>sd/enus/cs_main.bnk</code>.</li>
+<li>Put the results in one folder, laid out as <code>chr/...</code>, <code>regulation-bin/...</code>
+and, if you have them, <code>sd/...</code>.</li>
+</ul>
+</li>
+<li><p><strong>Tell the tools where things are.</strong> They read two environment variables:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Points at</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ER_FILES</code></td>
+<td>the folder from step 1</td>
+<td><code>er-files</code> in the project</td>
+</tr>
+<tr>
+<td><code>ER_GAME_DIR</code></td>
+<td>the game&#39;s <code>Game</code> folder</td>
+<td>the default Steam location</td>
+</tr>
+</tbody></table>
+<p>In PowerShell, for example:</p>
+<pre><code class="language-powershell">$env:ER_FILES = &quot;C:\path\to\unpacked&quot;
+$env:ER_GAME_DIR = &quot;D:\Steam\steamapps\common\ELDEN RING\Game&quot;
+</code></pre>
+</li>
+<li><p><strong>Generate the data</strong> (takes about a minute):</p>
+<pre><code class="language-bash">python tools/setup.py
+</code></pre>
+<p>If the sound banks are not there, it says so, skips that step and the
+sandbox runs silent.</p>
+</li>
+<li><p><strong>Run it</strong> from the project folder:</p>
+<pre><code class="language-bash">cargo run
+</code></pre>
+</li>
+</ol>
+<p>After that the game files are no longer needed to run the sandbox, only to
+regenerate the data. Run <code>setup.py</code> again after pulling changes that touch
+<code>tools/</code>: new actions and animations need regenerated data. It just runs the
+three generators, which can also be run on their own:</p>
+<pre><code class="language-bash">python tools/extract.py
+</code></pre>
+<pre><code class="language-bash">python tools/bake_anims.py
+</code></pre>
+<pre><code class="language-bash">python tools/bake_sounds.py
+</code></pre>
+<h2 id="layout">Layout</h2><table>
+<thead>
+<tr>
+<th>Path</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/sim/</code></td>
+<td>The whole game as a pure 60 Hz state machine, with no engine types.</td>
+</tr>
+<tr>
+<td><code>src/sim/extracted.rs</code></td>
+<td>Generated action table. Not in the repository; do not edit by hand.</td>
+</tr>
+<tr>
+<td><code>src/sim/data.rs</code></td>
+<td>Action types, plus every value that is still an estimate.</td>
+</tr>
+<tr>
+<td><code>src/sim/player.rs</code>, <code>src/sim/dummy.rs</code>, <code>src/sim/level.rs</code></td>
+<td>The player, the sparring dummy and the arena.</td>
+</tr>
+<tr>
+<td><code>src/sim/tests.rs</code></td>
+<td>Behaviour tests; run with <code>cargo test</code>.</td>
+</tr>
+<tr>
+<td><code>src/rig.rs</code>, <code>src/anim.rs</code></td>
+<td>The rig, and loading and playing the baked animations.</td>
+</tr>
+<tr>
+<td><code>src/audio.rs</code></td>
+<td>Plays the baked sounds as the animations pass their frames.</td>
+</tr>
+<tr>
+<td><code>src/demo.rs</code></td>
+<td>The scripted demo, and a test that plays it through without a window.</td>
+</tr>
+<tr>
+<td><code>src/camera.rs</code>, <code>src/input.rs</code>, <code>src/hud.rs</code>, <code>src/view.rs</code></td>
+<td>Camera, bindings, HUD, arena and dummy visuals.</td>
+</tr>
+<tr>
+<td><code>tools/setup.py</code></td>
+<td>Runs the generators below.</td>
+</tr>
+<tr>
+<td><code>tools/extract.py</code></td>
+<td>Reads timings, root motion and params; writes <code>extracted.rs</code>.</td>
+</tr>
+<tr>
+<td><code>tools/bake_anims.py</code></td>
+<td>Decodes the skeletal animations; writes <code>assets/player_anims.bin</code>.</td>
+</tr>
+<tr>
+<td><code>tools/bake_sounds.py</code></td>
+<td>Resolves each animation&#39;s sound events in the Wwise banks; writes <code>assets/player_sounds.bin</code> and <code>assets/sounds/</code>.</td>
+</tr>
+<tr>
+<td><code>tools/wwise.py</code>, <code>tools/wem.py</code></td>
+<td>Wwise bank reader, and Wwise Vorbis to Ogg Vorbis conversion (a port of ww2ogg, see <code>tools/ww2ogg/COPYING</code>).</td>
+</tr>
+<tr>
+<td><code>tools/*.py</code> (others)</td>
+<td>Readers for the game&#39;s container, event, animation and param formats.</td>
+</tr>
+</tbody></table>
+<h2 id="a-note-on-the-data">A note on the data</h2><p><code>src/sim/extracted.rs</code>, <code>assets/player_anims.bin</code>, <code>assets/player_sounds.bin</code>
+and <code>assets/sounds/</code> are derived from the game&#39;s files, so none is committed
+and all are in <code>.gitignore</code>. Please keep it that way in forks: share the code,
+and let each person generate the data from the copy of the game they own.</p>
+<h2 id="license">License</h2><p>The code is under the <a href="/files/LICENSE.md.html">MIT License</a>. <code>tools/ww2ogg/</code> is a port of
+ww2ogg and keeps its own licence (<code>tools/ww2ogg/COPYING</code>).</p>
+<p>The licence covers this project&#39;s code only. It grants nothing over ELDEN
+RING or anything generated from its files, which remain FromSoftware&#39;s and
+Bandai Namco&#39;s.</p>
+<div class="navfiles"><a class="prev" href="/files/package.json.html">← package.json</a><a class="next" href="/files/server.mjs.html">server.mjs →</a></div></main>
+</div>
+<footer>Served from a VM via a temporary Cloudflare quick tunnel · generated Thu, 08 Oct 2026 21:22:31 GMT · upstream repo is MIT licensed ·
+shortcuts: <span class="kbd">/</span> search · <span class="kbd">t</span> theme · <span class="kbd">[</span>/<span class="kbd">]</span> prev/next file</footer>
+<script>
+(function(){
+  var saved = null;
+  try { saved = localStorage.getItem('er-theme'); } catch(e) {}
+  if (saved === 'light') setTheme('light');
+  function setTheme(t) {
+    document.body.classList.toggle('light', t === 'light');
+    var d = document.getElementById('hljs-dark'), l = document.getElementById('hljs-light');
+    if (d && l) { d.disabled = (t === 'light'); l.disabled = (t !== 'light'); }
+    try { localStorage.setItem('er-theme', t); } catch(e) {}
+  }
+  var themeBtn = document.getElementById('theme');
+  if (themeBtn) themeBtn.addEventListener('click', function(){ setTheme(document.body.classList.contains('light') ? 'dark' : 'light'); });
+
+  var ham = document.getElementById('hamburger'), side = document.getElementById('sidebar');
+  if (ham && side) ham.addEventListener('click', function(){ side.classList.toggle('open'); });
+
+  document.addEventListener('keydown', function(e){
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === '/') { e.preventDefault(); var s = document.querySelector('header input.search'); if (s) s.focus(); }
+    else if (e.key === 't') { setTheme(document.body.classList.contains('light') ? 'dark' : 'light'); }
+    else if (e.key === '[') { var p = document.querySelector('.navfiles .prev'); if (p) location.href = p.href; }
+    else if (e.key === ']') { var n = document.querySelector('.navfiles .next'); if (n) location.href = n.href; }
+  });
+
+  var filter = document.getElementById('filter');
+  if (filter) filter.addEventListener('input', function(){
+    var q = filter.value.trim().toLowerCase();
+    document.querySelectorAll('.tree a').forEach(function(a){
+      var hit = !q || (a.dataset.name && a.dataset.name.includes(q)) || (a.dataset.path && a.dataset.path.includes(q));
+      a.classList.toggle('hidden', !hit);
+    });
+    document.querySelectorAll('.tree details').forEach(function(d){ if (q) d.open = true; });
+  });
+
+  // copy buttons on markdown code fences
+  document.querySelectorAll('main pre > code').forEach(function(code){
+    var pre = code.parentElement;
+    if (pre.parentElement && pre.parentElement.classList.contains('codewrap')) return;
+    pre.classList.add('mdpre');
+    var b = document.createElement('button');
+    b.className = 'btn copy'; b.textContent = 'Copy';
+    b.addEventListener('click', function(){
+      var t = code.innerText;
+      function done(){ b.textContent = 'Copied ✓'; setTimeout(function(){ b.textContent = 'Copy'; }, 1500); }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ fallback(); });
+      else fallback();
+      function fallback(){ var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e) {} ta.remove(); done(); }
+    });
+    pre.appendChild(b);
+  });
+
+  // gutter line numbers copy permalinks
+  document.querySelectorAll('.gutter a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var href = a.getAttribute('href');
+      var url = location.origin + location.pathname + href;
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).catch(function(){});
+      var el = document.getElementById(href.slice(1));
+      if (el) { el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); }, 1200); }
+      history.replaceState(null, '', href);
+      a.textContent = '✓'; setTimeout(function(){ a.textContent = a.dataset.n; }, 1200);
+    });
+  });
+
+  // highlight the line from the incoming hash
+  function flashHash(){
+    var h = location.hash;
+    if (h && h.indexOf('#L') === 0) {
+      var el = document.getElementById(h.slice(1));
+      if (el) { el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); }, 1500); el.scrollIntoView({block:'center'}); }
+    }
+  }
+  window.addEventListener('hashchange', flashHash);
+  flashHash();
+})();
+</script>
+</body></html>
