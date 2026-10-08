@@ -6,3 +6,5 @@ node_modules/
 
 # the site is rebuilt with: node gen.mjs
 # (kept in git so GitHub Pages can serve it directly)
+
+node_modules
