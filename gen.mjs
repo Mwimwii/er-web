@@ -85,7 +85,6 @@ for (const f of files) {
   if (ext === ".py") { pyFiles++; pyLines += r.text.split("\n").length; }
 }
 const genDate = new Date().toUTCString();
-const hostname = execSync("hostname").toString().trim();
 
 // ---------- tree ----------
 const tree = {};
@@ -134,25 +133,25 @@ const navPos = new Map(ordered.map((f, i) => [f.rel, i]));
 
 // ---------- css / shell ----------
 const css = `
-:root{--bg:#0e0d0b;--panel:#171512;--panel2:#1e1a15;--border:#2e2820;--gold:#c8a24a;--gold2:#e8cf8a;--fg:#e6dfcf;--dim:#9a917e;--code:#14120f;}
+:root{--bg:#0e0d0b;--panel:#171512;--panel2:#1e1a15;--border:#2e2820;--gold:#c8a24a;--gold2:#e8cf8a;--fg:#e6dfcf;--dim:#9a917e;--code:#14120f;--header-h:54px}
 body.light{--bg:#f6f1e7;--panel:#fffdf6;--panel2:#f1ead9;--border:#ddd2b8;--gold:#8a6d1f;--gold2:#6e5514;--fg:#2b2517;--dim:#6f6650;--code:#fbf7ec;}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;transition:background .15s,color .15s}
 a{color:var(--gold2);text-decoration:none}a:hover{text-decoration:underline}
-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 18px;background:var(--panel);border-bottom:1px solid var(--border)}
-header .brand{font-weight:700;color:var(--gold);letter-spacing:.4px;white-space:nowrap}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;height:var(--header-h);padding:0 18px;background:var(--panel);border-bottom:1px solid var(--border)}
+header .brand{font-weight:700;color:var(--gold);letter-spacing:.4px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
 header .sub{color:var(--dim);font-size:12.5px;white-space:nowrap}
 header .spacer{flex:1}
-header form{display:flex;gap:6px}
-header input.search{width:200px;background:var(--code);border:1px solid var(--border);border-radius:6px;color:var(--fg);padding:6px 10px;font-size:13px}
+header form{display:flex;gap:6px;min-width:0}
+header input.search{width:200px;min-width:0;flex:1 1 auto;background:var(--code);border:1px solid var(--border);border-radius:6px;color:var(--fg);padding:6px 10px;font-size:13px}
 header input.search:focus{outline:none;border-color:var(--gold)}
 header a.btn,header button.btn{font-size:12.5px;border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--fg);background:var(--panel2);white-space:nowrap;cursor:pointer}
 header a.btn:hover,header button.btn:hover{border-color:var(--gold);color:var(--gold2);text-decoration:none}
 button.btn{font-size:12.5px;border:1px solid var(--border);border-radius:6px;padding:4px 11px;color:var(--fg);background:var(--panel2);cursor:pointer}
 button.btn:hover{border-color:var(--gold);color:var(--gold2)}
-.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 46px)}
-aside{border-right:1px solid var(--border);background:var(--panel);padding:14px 10px 40px;overflow:auto;max-height:calc(100vh - 46px);position:sticky;top:46px}
+.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - var(--header-h))}
+aside{border-right:1px solid var(--border);background:var(--panel);padding:14px 10px 40px;overflow:auto;max-height:calc(100vh - var(--header-h));position:sticky;top:var(--header-h)}
 aside .filter{width:100%;background:var(--code);border:1px solid var(--border);border-radius:6px;color:var(--fg);padding:7px 9px;font-size:13px;margin-bottom:10px}
 .tree,.tree ul{list-style:none;margin:0;padding-left:12px}
 .tree{padding-left:0;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
@@ -168,8 +167,9 @@ h2{font-size:22px;margin-top:38px;border-bottom:1px solid var(--border);padding-
 h4{font-size:16px;margin-top:22px}
 .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:18px 0}
 .card h3{margin-top:0}
-.kv{display:grid;grid-template-columns:180px 1fr;gap:4px 14px;font-size:14px;margin:0}
-.kv dt{color:var(--dim)}.kv dd{margin:0}
+.kv{display:grid;grid-template-columns:180px minmax(0,1fr);gap:4px 14px;font-size:14px;margin:0}
+.kv dt{color:var(--dim)}.kv dd{margin:0;min-width:0}
+.kv code{overflow-wrap:anywhere}
 .badges span{display:inline-block;background:var(--panel2);border:1px solid var(--border);color:var(--gold2);border-radius:20px;padding:1px 12px;font-size:12px;margin:0 6px 6px 0}
 pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.55}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
@@ -207,15 +207,22 @@ footer{color:var(--dim);font-size:12.5px;border-top:1px solid var(--border);padd
 #hamburger{display:none}
 @media(max-width:900px){
   .layout{grid-template-columns:1fr}
-  aside{position:fixed;left:0;top:46px;bottom:0;width:270px;z-index:15;transform:translateX(-100%);transition:transform .18s;box-shadow:6px 0 24px rgba(0,0,0,.4)}
+  aside{position:fixed;left:0;top:var(--header-h);bottom:0;width:270px;max-height:none;z-index:15;transform:translateX(-100%);transition:transform .18s;box-shadow:6px 0 24px rgba(0,0,0,.4)}
   aside.open{transform:none}
   main{padding:18px 16px 60px;max-width:100%}
   #hamburger{display:inline-block}
+  header{gap:8px;padding:0 12px}
   header .sub{display:none}
   header input.search{width:110px}
   footer{padding:16px}
   .toc{columns:1}
 }
+@media(max-width:640px){
+  header .brand-sub{display:none}
+  .kv{grid-template-columns:minmax(0,1fr)}
+  .kv dd{margin-bottom:8px}
+}
+@media(max-width:430px){header .gh{display:none}}
 `;
 
 function page(title, body, activeRel, nav) {
@@ -231,12 +238,12 @@ function page(title, body, activeRel, nav) {
 </head><body>
 <header>
   <button class="btn" id="hamburger" aria-label="Toggle file tree">☰</button>
-  <a class="brand" href="/">⚔ ER Combat Rewrite</a>
+  <a class="brand" href="/" title="Elden Ring Combat Rewrite">⚔ ER<span class="brand-sub"> Combat Rewrite</span></a>
   <span class="sub">${esc(sha)}</span>
   <span class="spacer"></span>
   <form action="/search.html" method="get"><input class="search" name="q" type="search" placeholder="Search files…  ( / )" autocomplete="off"></form>
   <button class="btn" id="theme" title="Toggle light/dark (t)">◐</button>
-  <a class="btn" href="${REPO_URL}" target="_blank">GitHub ↗</a>
+  <a class="btn gh" href="${REPO_URL}" target="_blank">GitHub ↗</a>
 </header>
 <div class="layout">
 <aside id="sidebar">
@@ -245,7 +252,7 @@ function page(title, body, activeRel, nav) {
 </aside>
 <main>${crumb}${body}${nav ?? ""}</main>
 </div>
-<footer>Served from a VM via a temporary Cloudflare quick tunnel · generated ${esc(genDate)} · upstream repo is MIT licensed ·
+<footer>Static site generated from this checkout · ${esc(genDate)} · upstream repo is MIT licensed ·
 shortcuts: <span class="kbd">/</span> search · <span class="kbd">t</span> theme · <span class="kbd">[</span>/<span class="kbd">]</span> prev/next file</footer>
 <script>
 (function(){
@@ -459,7 +466,7 @@ const readmeHtml = marked.parse(mdLinkRewrite(readmeRaw));
 const statusCard = `
 <div class="card">
 <h3 id="can-this-run">Can this project run in a browser? — verified answer: no, and why</h3>
-<p>This is a <b>native desktop application</b> (Rust + <a href="${REPO_URL}" target="_blank">Bevy</a> 0.19, crate
+<p>This is a <b>native desktop application</b> (Rust + <a href="https://bevyengine.org" target="_blank">Bevy</a> 0.19, crate
 <code>tarnished</code>): it opens a window, takes keyboard/gamepad input and renders with the
 machine's GPU. It is not a web app and nothing upstream is served over HTTP. Three
 independent, verified facts:</p>
@@ -489,12 +496,13 @@ cargo run               # opens the sandbox window; WASD + mouse, T spawns the d
 <div class="card">
 <h3 id="about">This copy</h3>
 <div class="kv">
-<dt>Upstream</dt><dd><a href="${REPO_URL}" target="_blank">Funny-Bones/ELDEN-RING-Combat-Rewrite</a></dd>
+<dt>Upstream</dt><dd><a href="https://github.com/Funny-Bones/ELDEN-RING-Combat-Rewrite" target="_blank">Funny-Bones/ELDEN-RING-Combat-Rewrite</a></dd>
+<dt>This copy</dt><dd><a href="${REPO_URL}" target="_blank">Mwimwii/er-web</a> — a browsable fork of the above</dd>
 <dt>Commit</dt><dd><code>${fullSha}</code> on ${esc(branch)} (<code>${esc(sha)}</code>)</dd>
 <dt>Rust code</dt><dd>${rsFiles} files · ${rsLines.toLocaleString()} lines — <code>src/sim/</code> is a pure 60 Hz state machine with no engine types</dd>
 <dt>Python tools</dt><dd>${pyFiles} files · ${pyLines.toLocaleString()} lines — stdlib only; the extract step is Windows-only</dd>
 <dt>Files here</dt><dd>${files.length} total · ${textFiles} text browsable · ${files.length - textFiles} binary</dd>
-<dt>Server</dt><dd>${esc(hostname)} · ${esc(genDate)}</dd>
+<dt>Generated</dt><dd>${esc(genDate)}</dd>
 <dt>Shortcuts</dt><dd><span class="kbd">/</span> search · <span class="kbd">t</span> theme · <span class="kbd">[</span>/<span class="kbd">]</span> prev/next file · click a line number to copy its permalink</dd>
 </div>
 <p class="badges" style="margin-top:12px"><span>60 Hz pure-Rust sim</span><span>timings from game files</span><span>24 weapon classes</span><span>power stance</span><span>hit-stop</span><span>guard meter &amp; break</span><span>lock-on combat</span><span>sparring dummy</span></p>
@@ -542,11 +550,11 @@ const searchPage = `<!doctype html>
 <style>${css}</style>
 </head><body>
 <header>
-  <a class="brand" href="/">⚔ ER Combat Rewrite</a>
+  <a class="brand" href="/" title="Elden Ring Combat Rewrite">⚔ ER<span class="brand-sub"> Combat Rewrite</span></a>
   <span class="sub">search</span>
   <span class="spacer"></span>
   <form action="/search.html" method="get" onsubmit="return false"><input class="search" id="q" type="search" placeholder="Search all files…  ( / )" value="" autocomplete="off" autofocus></form>
-  <a class="btn" href="${REPO_URL}" target="_blank">GitHub ↗</a>
+  <a class="btn gh" href="${REPO_URL}" target="_blank">GitHub ↗</a>
 </header>
 <main style="max-width:900px;padding:28px 40px 80px">
   <h1 style="border:none;margin-top:0">Search the source</h1>
@@ -560,7 +568,13 @@ const searchPage = `<!doctype html>
 .hit .loc{flex:none;width:300px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--gold2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hit .loc:hover{text-decoration:underline}
 .hit pre{margin:0;padding:2px 10px;font-size:12.5px;flex:1;white-space:pre;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:800px){.hit{flex-direction:column;gap:0}.hit .loc{width:auto}}
+@media(max-width:800px){
+  .hit{flex-direction:column;gap:0}
+  .hit .loc{width:auto}
+  /* column flex stretches items to the line's cross size, which is the
+     unbreakable content width of a white-space:pre snippet; pin it instead. */
+  .hit pre{flex:none;width:100%;box-sizing:border-box}
+}
 </style>
 <script>
 (function(){
@@ -612,7 +626,7 @@ fs.writeFileSync(path.join(OUT, "404.html"), `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Not found · Elden Ring Combat Rewrite</title>
 <link rel="stylesheet" href="/hljs/github-dark.min.css"><style>${css}</style></head>
-<body><header><a class="brand" href="/">⚔ ER Combat Rewrite</a><span class="spacer"></span><a class="btn" href="${REPO_URL}" target="_blank">GitHub ↗</a></header>
+<body><header><a class="brand" href="/" title="Elden Ring Combat Rewrite">⚔ ER<span class="brand-sub"> Combat Rewrite</span></a><span class="spacer"></span><a class="btn gh" href="${REPO_URL}" target="_blank">GitHub ↗</a></header>
 <main style="padding:40px 44px;max-width:700px">
 <h1 style="border:none">404 — nothing here</h1>
 <p>That path isn't part of this browsable copy of the repo. Try the <a href="/">overview</a>, the

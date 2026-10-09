@@ -1,18 +1,23 @@
 #!/bin/bash
 # Static verification of the generated site: every inline script must parse,
 # every anchor must have a target, HTML tag balance must hold on code pages.
+#
+#   bash verify-static.sh [BASE_URL] [SITEDIR]
+#
+# Defaults to the site this checkout just generated, served on localhost:8090.
 set -u
+HERE="$(cd "$(dirname "$0")" && pwd)"
 BASE="${1:-http://localhost:8090}"
-SITEDIR="${2:-/root/elden-site/site}"
+SITEDIR="${2:-$HERE/site}"
 TMP=$(mktemp -d)
 fail=0
 
 # collect all html pages
-cd "$SITEDIR"
-pages=$(find . -name '*.html' | sed 's|^\.||')
+cd "$SITEDIR" || { echo "no such site dir: $SITEDIR"; exit 1; }
+pages=$(find . -name '*.html' | sed 's|^\./||')
 
 for p in $pages; do
-  html=$(curl -s "$BASE$p")
+  html=$(curl -s "$BASE/$p")
   [ -z "$html" ] && { echo "EMPTY $p"; fail=1; continue; }
 
   # 1. every inline <script> (without src) must parse as JS

@@ -1,17 +1,21 @@
 {
-  "name": "elden-site",
+  "name": "er-web",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "Static browsable copy of ELDEN-RING-Combat-Rewrite, built for browsers",
+  "private": true,
   "type": "commonjs",
+  "license": "MIT",
+  "scripts": {
+    "build": "node gen.mjs",
+    "serve": "node server.mjs 8090",
+    "test": "node browser-test.mjs",
+    "test:static": "bash verify-static.sh http://localhost:8090 site"
+  },
   "dependencies": {
     "highlight.js": "^11.12.0",
     "marked": "^15.0.12"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.0"
   }
 }
